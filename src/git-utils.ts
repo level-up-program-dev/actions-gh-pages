@@ -67,7 +67,7 @@ export async function copyAssets(
 export async function setRepo(inps: Inputs, remoteURL: string, workDir: string): Promise<void> {
   const publishDir = path.isAbsolute(inps.PublishDir)
     ? inps.PublishDir
-    : path.join('/opt/actions-runner/_work/gh/', inps.PublishDir);
+    : path.join(`${process.env.GITHUB_WORKSPACE}`, inps.PublishDir);
 
   if (path.isAbsolute(inps.DestinationDir)) {
     throw new Error('destination_dir should be a relative path');
