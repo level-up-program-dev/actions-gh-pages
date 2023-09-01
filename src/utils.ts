@@ -2,6 +2,7 @@ import * as core from '@actions/core';
 import * as io from '@actions/io';
 import path from 'path';
 import fs from 'fs';
+import {rm} from 'shelljs';
 
 export async function getHomeDir(): Promise<string> {
   let homedir = '';
@@ -26,6 +27,14 @@ export async function getWorkDirName(unixTime: string): Promise<string> {
 export async function createDir(dirPath: string): Promise<void> {
   await io.mkdirP(dirPath);
   core.debug(`Created directory ${dirPath}`);
+  return;
+}
+
+export async function removeDir(dirPath: string): Promise<void> {
+  if (fs.existsSync(dirPath)) {
+    core.info(`[INFO] delete ${dirPath}`);
+    rm('-rf', dirPath);
+  }
   return;
 }
 
