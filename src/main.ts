@@ -7,6 +7,8 @@ import {showInputs, getInputs} from './get-inputs';
 import {setTokens} from './set-tokens';
 import {setRepo, setCommitAuthor, getCommitMessage, commit, push, pushTag} from './git-utils';
 import {getWorkDirName, addNoJekyll, addCNAME, skipOnFork} from './utils';
+import fs from 'fs';
+import rm from 'shelljs';
 
 export async function run(): Promise<void> {
   try {
@@ -85,6 +87,13 @@ export async function run(): Promise<void> {
     core.startGroup('Push the commit or tag');
     await push(inps.PublishBranch, inps.ForceOrphan);
     await pushTag(inps.TagName, inps.TagMessage);
+    core.endGroup();
+
+    core.startGroup('Cleaning up assets for self hosted runner');
+    if (fs.existsSync(workDir)) {
+      core.info(`[INFO] delete ${workDir}`);
+      rm('-rf', workDir);
+    }
     core.endGroup();
 
     core.info('[INFO] Action successfully completed');
