@@ -9,7 +9,7 @@ export async function getHomeDir(): Promise<string> {
   if (process.platform === 'win32') {
     homedir = process.env['USERPROFILE'] || 'C:\\';
   } else {
-    homedir = `${process.env.HOME}`;
+    homedir = '/opt/actions-runner/_work';
   }
 
   core.debug(`homeDir: ${homedir}`);
